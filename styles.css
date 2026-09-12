@@ -17,6 +17,7 @@ nav ul {
     display: flex;
     flex-direction: row;
     list-style-type: none;
+    align-items: center;
     gap: 2rem;
 }
 
@@ -173,4 +174,13 @@ footer {
 .userAction button {
     margin-top: 1rem;
     text-align: center;
+}
+
+.login-felmeddelanden {
+    color: red; 
+    margin-bottom: 1rem;
+}
+
+.register-felmeddelanden {
+    margin-bottom: 1rem;
 }

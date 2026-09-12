@@ -13,7 +13,7 @@
         <header>
             <h1>RandomStuff</h1>
             <nav>
-                <ul>
+                <ul class="menu">
                     <li><a href="index.html">Hem</a></li>
                     <li><a href="admin.html">Admin</a></li>
                     <li><a href="login.html">Logga in</a></li>
@@ -25,30 +25,37 @@
             <section class="userAction">
                 <h3>Logga in</h3>
 
-                <div class="inputs">
-                    <label for="username">Användarnamn:</label>
-                    <input required id="username" type="text">
-                </div>
+                <form method="post" class="loginForm">
+                    <div class="login-felmeddelanden"></div>
+                    <div class="inputs">
+                        <label for="username">Användarnamn:</label>
+                        <input id="loginUsername" type="text">
+                    </div>
 
-                <div class="inputs">
-                    <label for="password">Lösenord:</label>
-                    <input required id="password" type="password">
-                </div>
-                <button class="submitBtn" type="submit">Logga in</button>
+                    <div class="inputs">
+                        <label for="password">Lösenord:</label>
+                        <input id="loginPassword" type="password">
+                    </div>
+                    <button class="submitBtn" type="submit">Logga in</button>
+                </form>
+
             </section>
             <section class="userAction">
                 <h3>Registrera dig</h3>
 
-                <div class="inputs">
-                    <label for="username">Användarnamn:</label>
-                    <input required id="username" type="text">
-                </div>
+                <form method="post" class="registerForm">
+                    <div class="register-felmeddelanden"></div>
+                    <div class="inputs">
+                        <label for="username">Användarnamn:</label>
+                        <input required id="registerUsername" type="text">
+                    </div>
 
-                <div class="inputs">
-                    <label for="password">Lösenord:</label>
-                    <input required id="password" type="password">
-                </div>
-                <button class="submitBtn" type="submit">Registrera dig</button>
+                    <div class="inputs">
+                        <label for="password">Lösenord:</label>
+                        <input required id="registerPassword" type="password">
+                    </div>
+                    <button class="submitBtn" type="submit">Registrera dig</button>
+                </form>
 
             </section>
         </section>
