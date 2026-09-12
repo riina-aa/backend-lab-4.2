@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Laboration 4</title>
 </head>
 
@@ -19,35 +20,35 @@
                 </ul>
             </nav>
         </header>
-        <section>
+        <section class="firstPage">
             <h2>Logga in eller registrera dig</h2>
             <section class="userAction">
                 <h3>Logga in</h3>
 
-                <div>
+                <div class="inputs">
                     <label for="username">Användarnamn:</label>
                     <input required id="username" type="text">
                 </div>
 
-                <div>
+                <div class="inputs">
                     <label for="password">Lösenord:</label>
                     <input required id="password" type="password">
                 </div>
-                <button type="submit">Logga in</button>
+                <button class="submitBtn" type="submit">Logga in</button>
             </section>
             <section class="userAction">
                 <h3>Registrera dig</h3>
 
-                <div>
+                <div class="inputs">
                     <label for="username">Användarnamn:</label>
                     <input required id="username" type="text">
                 </div>
 
-                <div>
+                <div class="inputs">
                     <label for="password">Lösenord:</label>
                     <input required id="password" type="password">
                 </div>
-                <button type="submit">Registrera dig</button>
+                <button class="submitBtn" type="submit">Registrera dig</button>
 
             </section>
         </section>
@@ -57,6 +58,7 @@
             <p>Mittuniversitet 2026</p>
         </footer>
     </main>
+    <script src="main.js"></script>
 </body>
 
 </html>
