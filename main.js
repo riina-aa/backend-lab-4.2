@@ -33,12 +33,17 @@ function init() {
         loginForm.addEventListener("submit", loginUser)
     }
 
-    const registerForm = document.querySelector(".registerForm"); 
+    const registerForm = document.querySelector(".registerForm");
 
-    if(registerForm) {
+    if (registerForm) {
         registerForm.addEventListener("submit", registerUser)
     }
 
+    const productForm = document.querySelector("#productForm");
+
+    if (productForm) {
+        productForm.addEventListener("submit", addProducts)
+    }
 }
 
 async function fetchProducts() {
@@ -91,10 +96,20 @@ function renderDeletelist(products) {
                 <p class="p-beskrivning">${product.description}</p>
                 <p class="p-pris">${product.productPrice} kr</p>
             </div>
-            <button class="submitBtn" type="submit">Ta bort produkt</button>
+            <button data-id="${product._id}" class="submitBtn deleteBtn" type="button">Ta bort produkt</button>
         </article>
         `
     });
+
+    const deleteButtons = document.querySelectorAll(".deleteBtn");
+
+    deleteButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const id = button.dataset.id;
+
+            deleteProducts(id);
+        })
+    })
 };
 
 function changeMenu() {
@@ -158,8 +173,7 @@ async function loginUser(e) {
 
         if (resp.ok) {
             const data = await resp.json();
-
-            localStorage.setItem("webshop-token", data.token);
+            localStorage.setItem("webshop-token", data.response.token);
             window.location.href = "admin.html"
         }
 
@@ -177,7 +191,7 @@ async function registerUser(e) {
 
     let userInput = document.querySelector("#registerUsername").value;
     let passwordInput = document.querySelector("#registerPassword").value;
-    const errorContainer = document.querySelector(".register-felmeddelanden"); 
+    const errorContainer = document.querySelector(".register-felmeddelanden");
 
     if (!userInput || !passwordInput) {
 
@@ -204,14 +218,87 @@ async function registerUser(e) {
 
         if (resp.ok) {
             const data = await resp.json();
-            
+
             errorContainer.innerHTML = `
             <p>${data.message}</p>
             `
-        } 
+        }
 
     } catch (error) {
         throw error;
     }
-}; 
+};
 
+async function addProducts(e) {
+
+    e.preventDefault();
+
+    let pName = document.querySelector("#productName").value;
+    let pDescription = document.querySelector("#beskrivning").value;
+    let pPrice = document.querySelector("#produktPris").value;
+    const messageContainer = document.querySelector(".produkt-meddelanden");
+
+    if (!pName || !pDescription || !pPrice) {
+        messageContainer.innerHTML = `
+        <p>Du måste fylla i alla fält</p>
+        `
+
+        return;
+    }
+
+    let product = {
+        productName: pName,
+        description: pDescription,
+        productPrice: pPrice
+    }
+
+    const token = localStorage.getItem("webshop-token");
+
+    try {
+        const resp = await fetch("http://localhost:5034/webshop/products", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                "authorization": "Bearer " + token
+            },
+            body: JSON.stringify(product)
+        });
+
+        if (resp.ok) {
+            const data = await resp.json();
+
+            messageContainer.innerHTML = `
+            <p>${data.message}</p>
+            `
+            const productForm = document.querySelector("#productForm");
+
+            productForm.reset();
+            fetchProducts();
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+async function deleteProducts(id) {
+
+    const token = localStorage.getItem("webshop-token");
+
+    try {
+        const response = await fetch(`http://localhost:5034/webshop/products/${id}`, {
+            method: "DELETE",
+            headers: {
+                authorization: "Bearer " + token
+            }
+        });
+
+        if (response.ok) {
+            fetchProducts(); 
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}

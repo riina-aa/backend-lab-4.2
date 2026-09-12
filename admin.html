@@ -29,23 +29,25 @@
             </div>
             <section class="add">
                 <h3>Lägg till produkter</h3>
-                <div class="inputs">
-                    <label for="productName">Produktnamn:</label>
-                    <input type="text" name="productName" id="productName">
-                </div>
-                <div class="inputs">
-                    <label for="beskrivning">Beskrivning:</label>
-                    <textarea rows="2" name="description" id="beskrivning"></textarea>
-                </div>
-                <div class="inputs">
-                    <label for="produktPris">Produktpris:</label>
-                    <input type="text" name="productPrice" id="produktPris">
-                </div>
-                <div class="buttons">
-                    <button class="submitBtn" type="submit">Lägg till produkt</button>
-                    <button class="submitBtn" type="reset">Rensa formulär</button>
-                </div>
-
+                <form id="productForm">
+                    <div class="produkt-meddelanden"></div>
+                    <div class="inputs">
+                        <label for="productName">Produktnamn:</label>
+                        <input type="text" name="productName" id="productName">
+                    </div>
+                    <div class="inputs">
+                        <label for="beskrivning">Beskrivning:</label>
+                        <textarea rows="2" name="description" id="beskrivning"></textarea>
+                    </div>
+                    <div class="inputs">
+                        <label for="produktPris">Produktpris:</label>
+                        <input type="text" name="productPrice" id="produktPris">
+                    </div>
+                    <div class="buttons">
+                        <button class="submitBtn" type="submit">Lägg till produkt</button>
+                        <button class="submitBtn" type="reset">Rensa formulär</button>
+                    </div>
+                </form>
             </section>
             <section class="delete">
                 <h3>Radera produkter</h3>
