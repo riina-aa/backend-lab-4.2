@@ -10,13 +10,13 @@ function init() {
     const list = document.querySelector(".produkter");
 
     if (list) {
-        fetchProducts();
+        fetchUserProducts();
     }
 
     const deleteList = document.querySelector(".delete-list");
 
     if (deleteList) {
-        fetchProducts();
+        fetchAdminProducts();
     }
 
     const loginBtn = document.querySelector("#login-btn");
@@ -46,7 +46,7 @@ function init() {
     }
 }
 
-async function fetchProducts() {
+async function fetchUserProducts() {
 
     let result = await fetch("http://localhost:5034/webshop/products", {
         method: "GET"
@@ -55,8 +55,22 @@ async function fetchProducts() {
     let data = await result.json();
 
     renderProductlist(data);
-    renderDeletelist(data);
+};
 
+async function fetchAdminProducts() {
+
+    const token = localStorage.getItem("webshop-token");
+
+    let result = await fetch("http://localhost:5034/webshop/admin/products", {
+        method: "GET",
+        headers: {
+            authorization: "Bearer " + token
+        }
+    });
+
+    let data = await result.json();
+
+    renderDeletelist(data);
 };
 
 function renderProductlist(products) {
@@ -94,7 +108,8 @@ function renderDeletelist(products) {
             <div class="information">
                 <p class="p-namn"><strong>${product.productName}</strong></p>
                 <p class="p-beskrivning">${product.description}</p>
-                <p class="p-pris">${product.productPrice} kr</p>
+                <p class="p-pris">Inköpspris: ${product.purchasePrice} kr</p>
+                <p class="p-pris">Försäljningspris: ${product.productPrice} kr</p>
             </div>
             <button data-id="${product._id}" class="submitBtn deleteBtn" type="button">Ta bort produkt</button>
         </article>
@@ -175,6 +190,12 @@ async function loginUser(e) {
             const data = await resp.json();
             localStorage.setItem("webshop-token", data.response.token);
             window.location.href = "admin.html"
+        } else {
+            const data = await resp.json();
+
+            document.querySelector(".login-felmeddelanden").innerHTML = `
+                <p>${data.message}</p>
+            `;
         }
 
     } catch (error) {
@@ -222,6 +243,12 @@ async function registerUser(e) {
             errorContainer.innerHTML = `
             <p>${data.message}</p>
             `
+        } else {
+            const data = await resp.json();
+
+            errorContainer.innerHTML = `
+                <p>${data.message}</p>
+             `;
         }
 
     } catch (error) {
@@ -235,10 +262,11 @@ async function addProducts(e) {
 
     let pName = document.querySelector("#productName").value;
     let pDescription = document.querySelector("#beskrivning").value;
-    let pPrice = document.querySelector("#produktPris").value;
+    let salesPrice = document.querySelector("#produktPris").value;
+    let purchasePrice = document.querySelector("#purchasePris").value;
     const messageContainer = document.querySelector(".produkt-meddelanden");
 
-    if (!pName || !pDescription || !pPrice) {
+    if (!pName || !pDescription || !salesPrice || !purchasePrice) {
         messageContainer.innerHTML = `
         <p>Du måste fylla i alla fält</p>
         `
@@ -249,7 +277,9 @@ async function addProducts(e) {
     let product = {
         productName: pName,
         description: pDescription,
-        productPrice: pPrice
+        productPrice: salesPrice,
+        purchasePrice: purchasePrice
+
     }
 
     const token = localStorage.getItem("webshop-token");
@@ -270,15 +300,20 @@ async function addProducts(e) {
             messageContainer.innerHTML = `
             <p>${data.message}</p>
             `
+            setTimeout(() => {
+                messageContainer.innerHTML = "";
+            }, 3000);
+            
             const productForm = document.querySelector("#productForm");
 
             productForm.reset();
-            fetchProducts();
         }
 
     } catch (error) {
         console.log(error)
     }
+
+    fetchAdminProducts();
 };
 
 async function deleteProducts(id) {
@@ -294,7 +329,7 @@ async function deleteProducts(id) {
         });
 
         if (response.ok) {
-            fetchProducts(); 
+            fetchAdminProducts();
         }
 
     } catch (error) {
