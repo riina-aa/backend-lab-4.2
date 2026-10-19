@@ -1,8 +1,9 @@
-
+//Väntar på att allting laddas klart innan kod körs
 document.addEventListener("DOMContentLoaded", () => {
     init();
 });
 
+//Startar igång funktionerna
 function init() {
 
     changeMenu()
@@ -46,6 +47,7 @@ function init() {
     }
 }
 
+//Hämtar alla publika produkter
 async function fetchUserProducts() {
 
     let result = await fetch("http://localhost:5034/webshop/products", {
@@ -57,6 +59,7 @@ async function fetchUserProducts() {
     renderProductlist(data);
 };
 
+//Hämtar alla adminprodukter
 async function fetchAdminProducts() {
 
     const token = localStorage.getItem("webshop-token");
@@ -73,6 +76,7 @@ async function fetchAdminProducts() {
     renderDeletelist(data);
 };
 
+//Renderar de publika produkterna på startsidan
 function renderProductlist(products) {
 
     const selectedList = document.querySelector(".produkter")
@@ -93,6 +97,7 @@ function renderProductlist(products) {
     });
 };
 
+//Renderar listan för admingränssnittet
 function renderDeletelist(products) {
 
     const selectedList = document.querySelector(".delete-list")
@@ -127,6 +132,7 @@ function renderDeletelist(products) {
     })
 };
 
+//Ändrar menyn beroende på om man är inloggad eller inte
 function changeMenu() {
 
     const menu = document.querySelector(".menu")
@@ -154,13 +160,16 @@ function changeMenu() {
     };
 };
 
+//Loggar in användare
 async function loginUser(e) {
 
     e.preventDefault();
 
+    //Hämtar värden
     let userInput = document.querySelector("#loginUsername").value;
     let passwordInput = document.querySelector("#loginPassword").value;
 
+    //Kontrollerar värden
     if (!userInput || !passwordInput) {
 
         const errorContainer = document.querySelector(".login-felmeddelanden");
@@ -172,6 +181,7 @@ async function loginUser(e) {
         return;
     };
 
+    //Bakar ihop värden
     let user = {
         username: userInput,
         password: passwordInput
@@ -186,6 +196,7 @@ async function loginUser(e) {
             body: JSON.stringify(user)
         });
 
+        //Vid lyckad inloggning så omdirigeras man till adminsidan
         if (resp.ok) {
             const data = await resp.json();
             localStorage.setItem("webshop-token", data.response.token);
@@ -206,6 +217,7 @@ async function loginUser(e) {
 
 }
 
+//Registrera användare 
 async function registerUser(e) {
 
     e.preventDefault();
@@ -256,6 +268,7 @@ async function registerUser(e) {
     }
 };
 
+//Lägger till produkter
 async function addProducts(e) {
 
     e.preventDefault();
@@ -282,8 +295,9 @@ async function addProducts(e) {
 
     }
 
-    const token = localStorage.getItem("webshop-token");
+    const token = localStorage.getItem("webshop-token"); //Hämtar token för att komma åt skyddad route
 
+    //En fetch med en authorization-header 
     try {
         const resp = await fetch("http://localhost:5034/webshop/products", {
             method: "POST",
@@ -316,9 +330,10 @@ async function addProducts(e) {
     fetchAdminProducts();
 };
 
+//Funktion för att radera produkter
 async function deleteProducts(id) {
 
-    const token = localStorage.getItem("webshop-token");
+    const token = localStorage.getItem("webshop-token"); //Hämtar token för att komma åt skyddad route
 
     try {
         const response = await fetch(`http://localhost:5034/webshop/products/${id}`, {
